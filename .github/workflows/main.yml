@@ -1,0 +1,58 @@
+name: CI-CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+
+  build-and-test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # 1. Checkout source code
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 2. Setup Python
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # 3. Install dependencies
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # 4. Compile Python code
+      - name: Compile Code
+        run: |
+          python -m compileall .
+
+      # 5. Run Test Cases
+      - name: Run Test Cases
+        run: |
+          pytest -v
+
+      # 6. Create deployment package
+      - name: Create Package
+        run: |
+          mkdir package
+          cp app.py requirements.txt package/
+          tar -czf application.tar.gz package/
+
+      # 7. Upload artifact
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-application
+          path: application.tar.gz
