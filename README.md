@@ -1,7 +1,10 @@
 # Testing-Linux-and-Servers
 # 5g-airflow-mlops
 Quick reference: all scripts
+
 File	Responsibility
+
+
 src/ingest_data.py	Load telemetry
 src/validate_data.py	Validate input data
 src/feature_engineering.py	Build engineered features
